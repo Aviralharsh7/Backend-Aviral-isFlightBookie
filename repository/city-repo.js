@@ -1,0 +1,74 @@
+const {City} = require('../models/index');
+const { Op } = require('sequelize');
+
+class CityRepository {
+    async CreateCity( {name}){
+        try {
+            const city = await City.create({
+                name,
+            });
+            return city;
+        } catch (error){
+            console.log("Error in repository layer");
+            throw {error};
+        }
+    }
+    
+    async deleteCity (cityId){
+        try{
+            await City.delete({
+                where: {
+                    id: cityId,
+                },
+            });
+            return true;
+        } catch (error){
+            console.log ("Error in repository layer");
+            throw {error};
+        }
+    }
+
+    async updateCity (cityId, cityData ){
+        try {
+            const target = await City.findByPk(cityId);
+            target.name = cityData.name;
+            await target.save();
+            return target;
+        } catch (error) {
+            console.log("Error in respository layer");
+            throw {error};
+        }
+    }
+
+    async getCity (cityId){
+        try {
+            const city = await City.findByPk(cityId);
+            return city; 
+        } catch (error) {
+            console.log("Error in respository layer");
+            throw {error};
+        }
+    }
+
+    async getAllCities (filter){
+        try {
+            if (filter.name){
+                const cities = await City.findAll({
+                    where: {
+                        name: {
+                            [Op.startsWith]: filter.name,
+                        }
+                    }
+                });
+                return cities;
+            }
+            const cities = await City.findAll();
+            return cities;
+        } catch (error){
+            console.log("Error in respository layer");
+            throw {error};
+        }
+    }
+}
+
+module.exports = CityRepository;
