@@ -16,4 +16,3 @@ router.use("/cities", cityRoutes);
 router.get('/info', infoController.info);
 
 module.exports = router;
-
