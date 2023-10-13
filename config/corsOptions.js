@@ -1,5 +1,5 @@
 const allowedOrigins = require('./allowedOrigins');
-const errorCodes = require('../utils/errorCodes')
+const errorCodes = require('../utils/httpCodes')
 
 const corsOptions = {
     origin: (origin, callback) =>{
