@@ -1,6 +1,6 @@
 const {StatusCodes} = require('http-status-codes');
 const {errorResponse} = require('../utils/responseFormatting/errorResponse');
-const AppError = require('../utils/errors/appError');
+const AppError = require('../utils/errorFormatting/appError');
 
 function validateCreateRequest(req, res, next){
     if(!req.body.modelNumber){
@@ -38,8 +38,23 @@ function validateSeats( req, res, next){
 
 function validateUpdateRequest(req, res, next){
     if(Object.keys(req.body).length === 0){
-        
+        errorResponse.error = new AppError(
+            "No data in incoming request",
+            StatusCodes.BAD_REQUEST
+        );
+        return res.status(StatusCodes.BAD_REQUEST).json(errorResponse);
     }
+    if (req.body.capacity){
+        const airplaneSeats = req.body.capacity;
+        if(airplaneSeats < 0) {
+            errorResponse.error = new AppError (
+                "Airplane capacity in incoming request is negative",
+                StatusCodes.BAD_REQUEST
+            );
+            return res.status(StatusCodes.BAD_REQUEST).json(errorResponse);
+        }
+    }
+    next ();
 }
 
 

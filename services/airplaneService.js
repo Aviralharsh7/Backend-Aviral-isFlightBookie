@@ -1,10 +1,10 @@
-const { airplaneRepository} = require('../repository/airplaneRepository');
+const { AirplaneRepository} = require('../repository/airplaneRepository');
 const {StatusCodes} = require('http-status-codes');
-const AppError = require('../utils/errors/appError');
+const AppError = require('../utils/errorFormatting/appError');
 
-// we do not send successResponse from services.
-const {errorResponse} = require('../utils/responseFormatting/errorResponse');
-const { successResponse } = require('../utils/responseFormatting');
+const airplaneRepository = new AirplaneRepository;
+
+// we do not send successResponse, errorResponse from services.
 // const {successResponse, errorResponse} = require('../utils/responseFormatting');
 
 async function getAllAirplane() {
