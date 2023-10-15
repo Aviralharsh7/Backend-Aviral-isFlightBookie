@@ -1,14 +1,20 @@
-const {Airplane} = require('../models/index');
+const CrudRepository = require('./crudRepository');
+const {Airplane} = require('../models');
 
-class AirplaneRepository {
-    async getAirplane (id){
-        try {
-            const airplane = await Airplane.findByPk(id);
-        } catch (error) {
-            console.log("Error in repository layer");
-            throw { error };
-        }
+class AirplaneRepository extends CrudRepository {
+
+    // we set the model for this instance of "CrudRepository class" 
+    // which is "Airplane", using the constructor 
+    // now all methods will operate on "Airplane" model
+    constructor() {
+
+        // invokes constructor of parent class
+        // This is required when a child class extends a parent class and has its own constructor.
+        // this child constructor is only written because we have to initialise model
+        super(Airplane);      
     }
 }
 
-module.exports = AirplaneRepository;
+module.exports = {
+    AirplaneRepository
+};
