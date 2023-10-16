@@ -1,12 +1,15 @@
 "use strict";
-const {Model, DataTypes} = require("Sequelize");
-const { sequelize } = require(".");
 
-module.exports = (sequelize, DataTypes) => {
+const { Model, DataTypes } = require("sequelize");
+// const { sequelize } = require(".");
+
+module.exports = (sequelize, DataTypes) =>{
     class Airplane extends Model {
-        static associate(models){
-            Airplane.hasMany(models.Flight, {
-                foreignKey: 'airplaneId',
+        static associate (models){
+            this.hasMany(models.Flight, {
+                foreignKey: 'flightId',
+                onDelete: 'CASCADE',
+                onUpdate: 'CASCADE',
             });
         }
     }
@@ -18,13 +21,16 @@ module.exports = (sequelize, DataTypes) => {
             },
             capacity: {
                 type: DataTypes.INTEGER,
-                defaultValue: 200,
                 allowNull: false,
+                defaultValue: 0,
+                validate: {
+                    max: 1000,
+                },
             },
         },
         {
             sequelize,
-            modelName: "Airplane",
+            modelName: 'Airplane',
         }
     );
     return Airplane;

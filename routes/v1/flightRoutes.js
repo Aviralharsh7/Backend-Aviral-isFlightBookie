@@ -3,6 +3,7 @@ const router = express.Router();
 
 const {flightController} = require('../../controllers');
 const {flightMiddleware} = require('../../middlewares');
+const { verifyJWT} = require('../../config');
 
 // URL path : /api/flights/
 router.get(
@@ -15,11 +16,12 @@ router.get(
 router.get("/:id", flightController.getFlight);
 
 // URL path : /api/flights/:id
-router.delete("/:id", flightController.destroyFlight);
+router.delete("/:id", verifyJWT, flightController.destroyFlight);
 
 // URL path : /api/flights/
 router.post(
   "/",
+  verifyJWT,
   flightMiddleware.validateCreateRequest,
   flightMiddleware.validateDateTime,
   flightMiddleware.validatePriceAndSeats,
@@ -30,6 +32,7 @@ router.post(
 // URL path : /api/flights/:id/seats
 router.patch(
   "/:id/seats",
+  verifyJWT,
   flightMiddleware.validateUpdateSeatsRequest,
   flightController.updateSeats
 );

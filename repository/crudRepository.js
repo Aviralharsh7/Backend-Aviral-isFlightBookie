@@ -8,6 +8,9 @@ const { Flight, Airplane, Airport, City} = require('../models');
 const db = require('../models');
 
 class CrudRepository {
+    
+    // The constructor sets the model property of the CrudRepository instance to the provided model. 
+    // This means that any instance of CrudRepository will be associated with a specific Sequelize model for data manipulation.
     constructor (model) {
         this.model = model;
     }

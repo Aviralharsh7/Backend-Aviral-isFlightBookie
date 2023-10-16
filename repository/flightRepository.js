@@ -2,67 +2,84 @@ const {StatusCodes} = require('http-status-codes');
 const AppError = require('../utils/errorFormatting/appError');
 
 const {Sequelize, QueryError} = require('sequelize');
-const {Logger} = require('../config');
+const {logger} = require('../config');
 
 const CrudRepository = require('./crudRepository');
 const {Flight, Airplane, Airport, City} = require('../models');
 const db = require('../models');
-
-const { addRowLockOnFlight} = require('./queries');
 
 class FlightRepository extends CrudRepository{
     constructor(){
         super(Flight);
     }
 
-    async getAllFlight (filter,sort){
-        const response = await Flight.findAll({
-            where: filter, 
+    async getAllFlight(filter, sort) {
+        const response = await Flight.findAll ({
+            where: filter,
             order: sort,
             include: [
                 {
-                    model: Airplane,
-                    required: true, 
+                    // It tells Sequelize to join the 'Airplane' model with the 'Flight' model 
+                    // to fetch information about the airplane associated with each flight.
+                    model: 'Airplane',
+                    // the join between 'Flight' and 'Airplane' is treated as an inner join. 
+                    // This ensures that only flights with associated airplanes are returned in the result set. 
+                    // Flights without associated airplanes are excluded from the results.
+                    required: true,
                 },
                 {
-                    model: Airport,
+                    model: 'Airport',
                     required: true,
-                    as: "departureAirport",
-                    on:{
+                    as: 'departureAirport',
+
+                    // indicates that the join should be based on the equality of 'departureAirportId' in the 'Flight' model 
+                    // and 'code' in the 'Airport' model.
+                    on: {
                         col1: Sequelize.where(
-                            Sequelize.col("Flight.departureAirportId"),
+                            Sequelize.col ('Flight.departureAirportId'),
                             '=',
                             Sequelize.col('departureAirport.code')
                         ),
                     },
+
+                    // 'City', should be joined with the 'Airport' model. 
+                    // This allows you to fetch information about the city associated with the departure airport.
                     include: {
-                        model: City,
+                        model: 'City', 
                         required: true,
-                    }
+                    },
                 },
                 {
-                    model: Airport,
-                    reuqired: true,
-                    as: "arrivalAirport",
+                    model: 'Airport',
+                    required: true,
+                    as: 'arrivalAirport',
                     on: {
                         col1: Sequelize.where(
-                            Sequelize.col('Flight.arrivalAirportId'),
+                            Sequelize.col(Flight.arrivalAirportId),
                             '=',
                             Sequelize.col('arrivalAirport.code')
                         ),
                     },
-                    include: {
-                        model: City, 
+                    include: 
+                    {
+                        model: 'City',
                         required: true,
                     },
                 },
             ],
         });
-        return response; 
+
+        if (!response){
+            throw new AppError (
+                "Requested data cannot be found",
+                StatusCodes.NOT_FOUND
+            );
+        }
+        return response;
     }
 
-    async getFlight(id){
-        const response = await this.model.findByPk(id, {
+    async getFlight (id) {
+        const response = await Flight.findByPk (id, {
             include: [
                 {
                     model: Airplane,
@@ -71,7 +88,9 @@ class FlightRepository extends CrudRepository{
                 {
                     model: Airport,
                     required: true,
-                    as: "departureAirport",
+                    as: 'departureAirport',
+
+                    // overriding the default join location (primary key column)
                     on: {
                         col1: Sequelize.where(
                             Sequelize.col('Flight.departureAirportId'),
@@ -80,9 +99,9 @@ class FlightRepository extends CrudRepository{
                         ),
                     },
                     include: {
-                        model: City,
+                        model: 'City',
                         required: true,
-                    },
+                    }
                 },
                 {
                     model: Airport,
@@ -96,75 +115,56 @@ class FlightRepository extends CrudRepository{
                         ),
                     },
                     include: {
-                        model: City,
+                        model: 'City',
                         required: true,
                     },
                 },
             ],
         });
 
-        if(!response){
+        if (!response) {
             throw new AppError(
-                "Requested data for given ID could not be found",
+                "Requested data cannot be found",
                 StatusCodes.NOT_FOUND
             );
         }
         return response;
     }
 
-    async getAll() {
-        const response = await this.model.findAll();
-        return response;
-    }
+    async updateRemainingSeats(flightId, seats, dec = true) {
 
-    async update(id, data){
-        const tableAttributes = Object.keys(this.model.rawAttributes);
-        const reqAttributes = Object.keys(data);
-        const hasAllAttributes = reqAttributes.every((elem) =>
-            tableAttributes.includes(elem)
-        );
-
-        if(hasAllAttributes){
-            const response = await this.model.update(data, {
-                where: {
-                    id: id,
-                },
-            });
-
-            if(response [0] == 0) {
-                throw new AppError(
-                    "Requested data for given ID cannot be found",
-                    StatusCodes.NOT_FOUND
-                );
-            }
-            return response;
-        } else {
-            throw new AppError(
-                "The column for the given ID cannot be found",
-                StatusCodes.NOT_FOUND
-            );
+        function addRowLockOnFlight(flightId) {
+            return `SELECT * FROM Flights WHERE Flights.id = ${flightId} FOR UPDATE;`;
         }
-    }
 
-    async updateRemainingSeats(flightId, seats, dec = true){
         const transaction = await db.sequelize.transaction();
-        try{
+
+        try { 
+
+            // use of db object for writing SQL query
             await db.sequelize.query(addRowLockOnFlight(flightId));
             const flight = await Flight.findByPk(flightId);
-            if(+dec){
+            if (+dec){
                 await flight.decrement(
-                    "totalSeats",
+                    'totalSeats',
+                    {by: seats},
+                    {transaction: transaction}
+                );
+            } else {
+                await flight.increment(
+                    'totalSeats',
                     {by: seats},
                     {transaction: transaction}
                 );
             }
             await transaction.commit();
             return flight.reload();
+
         } catch (error){
             await transaction.rollback();
             throw new AppError(
-            "Flight Service is down",
-            StatusCodes.INTERNAL_SERVER_ERROR
+                "Requested changes cannot be made. Try again",
+                StatusCodes.INTERNAL_SERVER_ERROR
             );
         }
     }

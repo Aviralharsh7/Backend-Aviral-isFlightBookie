@@ -45,9 +45,10 @@ async function getAllFlight(query){
     }
 
     if (query.sort){
-         // departureTime_ASC,price_DESC
+
+        // departureTime_ASC,price_DESC
         const params = query.sort.split(',');    
-        const sortFilters = param.map((param) => param.split('_'));
+        const sortFilters = params.map((param) => param.split('_'));
         sortFilter = sortFilters; 
     }
 
@@ -142,11 +143,11 @@ async function createFlight(data){
     }
 }
 
-async function updateSeat(data){
+async function updateSeats(data){
     try {
-        const response = await flightRepository.updateRemainingSeat(
+        const response = await flightRepository.updateRemainingSeats(
             data.flightId,
-            data.seat,
+            data.seats,
             data.dec
         );
         return response;

@@ -1,57 +1,78 @@
 "use strict";
 
-const { DataTypes, Model } = require("sequelize");
-const { sequelize } = require(".");
+const {Model, DataTypes} = require('sequelize');
+// const { sequelize } = require('.');
 
-module.exports = (sequelize, DataTypes)=>{
-    class Flights extends Model {
+module.exports = (sequelize, DataTypes) =>{
+    class Flight extends Model {
+
+        // not part of sequelize lifecycle
+        // lifecycle contains hooks which define business logic, etc. 
         static associate (models){
-            Flights.belongsTo(models.Airplane, {
-                foreignKey: "flightId",
+            this.belongsTo(models.Airplane, {
+                foreignKey: 'airplaneId',
+                onDelete: 'CASCADE',
+                onUpdate: 'CASCADE',
+            });
+            this.belongsTo(models.Airport, {
+                foreignKey: 'departureAirportId',
+                as: 'departureAirport',          // multiple association bw these two models, so alias is specified.
+                onDelete: 'CASCADE',
+                onUpdate: 'CASCADE',
+            });
+            this.belongsTo(models.Airport, {
+                foreignKey: 'arrivalAirportId',
+                as: 'arrivalAirport',
+                onDelete: 'CASCADE',
+                onUpdate: 'CASCADE',
             });
         }
     }
-    Flights.init(
+
+    Flight.init(
         {
             flightNumber: {
+                // not unique since same flight can fly on multiple routes
                 type: DataTypes.STRING,
                 allowNull: false,
-                unique: true,
             },
             airplaneId: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
             },
             departureAirportId: {
-                type: DataTypes.INTEGER,
+                type: DataTypes.STRING,
+                allowNull: false,
+            },
+            departureTime: {
+                type: DataTypes.DATE,
                 allowNull: false,
             },
             arrivalAirportId: {
-                type: DataTypes.INTEGER,
+                type: DataTypes.STRING,
                 allowNull: false,
             },
             arrivalTime: {
-                allowNull: false,
                 type: DataTypes.DATE,
-            },
-            departureTime: {
                 allowNull: false,
-                type: DataTypes.DATE,
             },
             price: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
             },
-            boardingGate: DataTypes.STRING,
+            boardingGate: {
+                type: DataTypes.STRING,
+            },
             totalSeats: {
+                // updated to remaining seats with booking/cancellation
                 type: DataTypes.INTEGER,
                 allowNull: false,
             },
         },
         {
             sequelize,
-            modelName: "Flights",
+            modelName: 'Flight',
         }
     );
-    return Flights;
+    return Flight;
 };

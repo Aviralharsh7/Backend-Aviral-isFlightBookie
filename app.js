@@ -1,5 +1,5 @@
-const {Logger } = require('./config/logger-config');
-const { ServerConfig } = require("./config/server-config");
+const {logger } = require('./config/loggerConfig');
+const { serverConfig } = require("./config/server-config");
 
 
 const express = require('express');
@@ -35,23 +35,13 @@ app.use('/', express.static(path.join(__dirname, '/public')));
 app.use('/', require('./routes/root'));
 app.use('/api', routes); 
 
-// test route 
-app.use('/test', require('./routes/v1/testRoutes'));
+// // test route 
+// app.use('/test', require('./routes/v1/testRoutes'));
 
 
 // start server
-app.listen(ServerConfig.PORT, () => {
-    console.log(`Server is up and running on PORT: ${ServerConfig.PORT}`);
+app.listen(serverConfig.PORT, () => {
+    console.log(`Server is up and running on PORT: ${serverConfig.PORT}`);
 });
 
 module.exports = app;
-
-
-// // setup and start the server 
-// var server = http.createServer(app);
-// server.listen(PORT, async() =>{
-//     console.log(`Server started at ${PORT}`);
-//     if (process.env.SYNC_DB) {
-//     db.sequelize.sync({ alter: true });
-//         }
-// });

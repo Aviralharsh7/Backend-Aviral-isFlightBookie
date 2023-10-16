@@ -60,11 +60,11 @@ async function createFlight( req, res){
     }
 }
 
-async function updateSeat (req, res){
+async function updateSeats(req, res){
     try{
-        const response = await flightService.updateSeat({
+        const response = await flightService.updateSeats({
             flightId: req.params.id,
-            seat: req.body.seat,    // seats which are booked or cancelled (out of total seats)
+            seats: req.body.seats,    // seats which are booked or cancelled (out of total seats)
             dec: req.body.dec,      // if true, N then decrease seats by N else increase by N 
         });
         successResponse.data = response;
@@ -82,5 +82,5 @@ module.exports = {
     getFlight,
     destroyFlight, 
     createFlight,
-    updateSeat
+    updateSeats
 }
