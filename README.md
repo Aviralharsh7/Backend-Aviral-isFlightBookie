@@ -1,6 +1,5 @@
-# Backend of Flight Services
-
-*using Express.js and Sequelize*
+# MachArrow Airlines
+Backend of Flight Services Application *using Express.js and Sequelize*
 
 ## Features
 
