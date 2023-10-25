@@ -2,6 +2,8 @@
 Backend of Flight Services Application *using Express.js and Sequelize* 
 
 <br>
+via https://github.com/winterrrrrff/realWorld-server
+<br>
 PS: for proof of work, please visit "notes" folder where I documented my troubleshooting journey as build this project.
 
 ## Features
