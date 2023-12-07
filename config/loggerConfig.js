@@ -1,4 +1,5 @@
 const winston = require('winston');
+const { combine, timestamp, label, printf} = winston.format;
 const { eventNames } = require('../app');
 
 const logger = winston.createLogger({
@@ -15,8 +16,8 @@ const logger = winston.createLogger({
         })
     ),
     transports:[
-        new transports.Console(),
-        new transports.File({
+        new winston.transports.Console(),
+        new winston.transports.File({
             filename: 'AllLogs.log'
         }),
     ],

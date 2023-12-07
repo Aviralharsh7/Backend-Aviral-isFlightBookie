@@ -1,5 +1,6 @@
 const {logger } = require('./config/loggerConfig');
 const { serverConfig } = require("./config/server-config");
+const {sequelize} = require('./database');
 
 
 const express = require('express');
@@ -7,7 +8,6 @@ const app = express();
 
 const path = require('path');
 const http = require('http');
-const Sequelize = require("sequelize");
 
 const routes = require('./routes/index');
 const db = require('./models/index');
@@ -35,13 +35,16 @@ app.use('/', express.static(path.join(__dirname, '/public')));
 app.use('/', require('./routes/root'));
 app.use('/api', routes); 
 
-// // test route 
-// app.use('/test', require('./routes/v1/testRoutes'));
-
 
 // start server
-app.listen(serverConfig.PORT, () => {
-    console.log(`Server is up and running on PORT: ${serverConfig.PORT}`);
-});
+sequelize.sync({force: false})
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.error('Unable to sync models with the database:', error);
+  });
 
 module.exports = app;
