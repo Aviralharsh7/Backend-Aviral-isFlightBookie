@@ -2,7 +2,7 @@ const {StatusCodes} = require('http-status-codes');
 const {flightService} = require('../services');
 const {successResponse, errorResponse} = require('../utils/responseFormatting');
 
-async function getAllflight( req, res){
+async function getAllFlight( req, res){
     try {
         const allFlight = await flightService.getAllFlight(req.query);
         successResponse.data = allFlight;

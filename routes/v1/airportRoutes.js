@@ -5,14 +5,14 @@ const {airportController} = require('../../controllers');
 const {airportMiddleware} = require('../../middlewares');
 const { verifyJWT} = require('../../config');
 
-// URL path : /api/v1/airports/
+// URL path : /api/v1/airports/x
 router.get('/', airportController.getAllAirport);
 
 // URL path : /api/v1/airports/:id
 router.get('/:id', airportController.getAirport);
 
 // URL path : /api/v1/airports/:id
-router.delete("/:id", verifyJWT, AirportController.destroyAirport);
+router.delete("/:id", verifyJWT, airportController.destroyAirport);
 
 // URL path : /api/v1/airports/:id
 router.patch(

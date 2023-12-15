@@ -1,4 +1,4 @@
-const { AirplaneRepository} = require('../repository/airplaneRepository');
+const { AirplaneRepository} = require('../repository');
 const {StatusCodes} = require('http-status-codes');
 const AppError = require('../utils/errorFormatting/appError');
 

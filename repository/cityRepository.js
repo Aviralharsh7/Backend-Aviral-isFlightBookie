@@ -7,9 +7,7 @@ class CityRepository extends CrudRepository{
     }
 }
 
-module.exports = {
-    CityRepository
-};
+module.exports = CityRepository;
 
 
 

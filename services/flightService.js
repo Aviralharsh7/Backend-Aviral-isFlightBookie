@@ -1,5 +1,5 @@
 const {StatusCodes} = require('http-status-codes');
-const AppError = require('../utils/errors/appError');
+const AppError = require('../utils/errorFormatting/appError');
 
 const {FlightRepository} = require('../repository');
 const {Op} = require('sequelize');
@@ -172,5 +172,5 @@ module.exports = {
     getFlight,
     destroyFlight,
     createFlight,
-    updateSeat
+    updateSeats
 }

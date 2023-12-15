@@ -5,7 +5,6 @@ const { Sequelize} = require('sequelize');
 const { logger} = require('../config');
 
 const { Flight, Airplane, Airport, City} = require('../models');
-const db = require('../models');
 
 class CrudRepository {
     

@@ -1,6 +1,7 @@
 "use strict";
 
 const {Model, DataTypes} = require('sequelize');
+const { sequelize } = require("./index");
 
 module.exports = (sequelize, DataTypes) => {
     class City extends Model {

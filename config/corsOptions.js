@@ -1,5 +1,5 @@
 const allowedOrigins = require('./allowedOrigins');
-const errorCodes = require('../utils/httpCodes')
+const {StatusCodes} = require('http-status-codes');
 
 const corsOptions = {
     origin: (origin, callback) =>{
@@ -10,7 +10,7 @@ const corsOptions = {
         }
     },
     Credentials : true,
-    optionsSuccessStatus: errorCodes.SuccessCodes.OK
+    optionsSuccessStatus: StatusCodes.OK,
 }
 
 module.exports = corsOptions;

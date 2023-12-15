@@ -1,7 +1,6 @@
 const {logger } = require('./config/loggerConfig');
-const { serverConfig } = require("./config/server-config");
-const {sequelize} = require('./database');
-
+const { PORT } = require("./config/serverConfig");
+const {sequelize} = require('./models/index');
 
 const express = require('express');
 const app = express();
@@ -10,9 +9,6 @@ const path = require('path');
 const http = require('http');
 
 const routes = require('./routes/index');
-const db = require('./models/index');
-const errorCodes = require('./utils/httpCodes');
-
 
 // middleware
 const cors = require('cors');
@@ -37,7 +33,8 @@ app.use('/api', routes);
 
 
 // start server
-sequelize.sync({force: false})
+app.set('port', PORT);
+sequelize.sync({force: true})
   .then(() => {
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);

@@ -1,7 +1,6 @@
 require('dotenv').config();
 
 const PORT = normalizePort(process.env.PORT || '4000');
-app.set('port', PORT);
 
 function normalizePort(val){
     var port = parseInt(val, 10);
@@ -16,4 +15,4 @@ function normalizePort(val){
 
 module.exports = {
     PORT
-}
+};

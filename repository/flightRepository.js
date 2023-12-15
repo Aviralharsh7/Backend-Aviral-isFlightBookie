@@ -4,7 +4,7 @@ const AppError = require('../utils/errorFormatting/appError');
 const {Sequelize, QueryError} = require('sequelize');
 const {logger} = require('../config');
 
-const CrudRepository = require('./crudRepository');
+const {CrudRepository} = require('./crudRepository');
 const {Flight, Airplane, Airport, City} = require('../models');
 const db = require('../models');
 

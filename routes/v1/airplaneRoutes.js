@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const { AirplaneController, airplaneController} = require('../../controllers');
-const { AirplaneMiddlewares} = require('../../middlewares');
+const { airplaneController} = require('../../controllers');
+const { airplaneMiddleware} = require('../../middlewares');
 const { verifyJWT} = require('../../config');
 
 
@@ -16,7 +16,7 @@ router.get('/:id', airplaneController.getAirplane);
 router.delete(
   "/:id", 
   verifyJWT, 
-  AirplaneController.destroyAirplane
+  airplaneController.destroyAirplane
 );
 
 
@@ -24,17 +24,17 @@ router.delete(
 router.post(
   "/", 
   verifyJWT,
-  AirplaneMiddlewares.validateCreateRequest,
-  AirplaneMiddlewares.validateSeats,
-  AirplaneController.createAirplane
+  airplaneMiddleware.validateCreateRequest,
+  airplaneMiddleware.validateSeats,
+  airplaneController.createAirplane
 );
 
 // URL path : /api/v1/airplanes/:id
 router.patch(
   "/:id",
   verifyJWT,
-  AirplaneMiddlewares.validateUpdateRequest,
-  AirplaneController.updateAirplane
+  airplaneMiddleware.validateUpdateRequest,
+  airplaneController.updateAirplane
 );
 
 module.exports = router;

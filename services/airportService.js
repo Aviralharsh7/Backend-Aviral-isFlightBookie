@@ -1,7 +1,7 @@
 const {StatusCodes} = require('http-status-codes');
 const AppError = require('../utils/errorFormatting/appError');
 
-const {AirportRepository} = require('../repository');
+const {AirportRepository} = require('../repository/index');
 const { response } = require('express');
 const airportRepository = new AirportRepository();
 
@@ -57,7 +57,7 @@ async function destroyAirport(id){
 
 async function updateAirport (id, data){
     try {
-        const airport = await airportRepository.updateAirport(id, data);
+        const airport = await airportRepository.update(id, data);
         return airport;
 
     } catch (error){
