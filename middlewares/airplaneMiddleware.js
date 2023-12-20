@@ -1,5 +1,5 @@
 const {StatusCodes} = require('http-status-codes');
-const {errorResponse} = require('../utils/responseFormatting/errorResponse');
+const {errorResponse} = require('../utils/responseFormatting');
 const AppError = require('../utils/errorFormatting/appError');
 
 function validateCreateRequest(req, res, next){
@@ -44,6 +44,8 @@ function validateUpdateRequest(req, res, next){
         );
         return res.status(StatusCodes.BAD_REQUEST).json(errorResponse);
     }
+
+    // can remove this - and use validateSeats() once more in route def
     if (req.body.capacity){
         const airplaneSeats = req.body.capacity;
         if(airplaneSeats < 0) {

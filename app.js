@@ -19,12 +19,11 @@ const cookieParser = require('cookie-parser');
 // parsing request object 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
-
+app.use(cookieParser());
 
 // mounting middleware 
 app.use(cors(corsOptions));
-app.use(express.json());
-app.use(cookieParser());
+
 
 // mounting route handlers
 app.use('/', express.static(path.join(__dirname, '/public')));
@@ -34,7 +33,7 @@ app.use('/api', routes);
 
 // start server
 app.set('port', PORT);
-sequelize.sync({force: true})
+sequelize.sync({force: false, alter: true})
   .then(() => {
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);

@@ -3,7 +3,6 @@ const AppError = require('../utils/errorFormatting/appError');
 
 const {FlightRepository} = require('../repository');
 const {Op} = require('sequelize');
-const { errorResponse, successResponse } = require('../utils/responseFormatting');
 
 const flightRepository = new FlightRepository();
 
@@ -25,7 +24,7 @@ async function getAllFlight(query){
         // example "50-100"
         [minPrice, maxPrice] = query.price.split('-');
         customFilter.price = {
-            // Op.between is key of property named "price" in object named "customFilter"
+            // Op.between is sequelize operator 
             // Op.between contains an array of two elements.
             // second element value is determined by ternary operator 
             [Op.between]: [minPrice, maxPrice == undefined? 1000000: maxPrice],
@@ -89,7 +88,7 @@ async function getFlight(id){
 
 async function destroyFlight (id){
     try {
-        const response = await flightRepository.destroyFlight(id);
+        const response = await flightRepository.destroy(id);
         return response;
         
     } catch (error) {

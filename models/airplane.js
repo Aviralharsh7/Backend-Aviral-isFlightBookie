@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) =>{
     }
     Airplane.init(
         {
+            // shouldnt it have unique constraint ?? 
             modelNumber: {
                 type: DataTypes.STRING,
                 allowNull: false,

@@ -1,8 +1,7 @@
 const {StatusCodes} = require('http-status-codes');
 const AppError = require('../utils/errorFormatting/appError');
 
-const {AirportRepository} = require('../repository/index');
-const { response } = require('express');
+const {AirportRepository} = require('../repository');
 const airportRepository = new AirportRepository();
 
 async function getAllAirport (){

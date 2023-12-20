@@ -100,8 +100,8 @@ function validateDateTime (req, res, next) {
     const flightArrivalTime = req.body.arrivalTime;
     const flightDepartureTime = req.body.departureTime;
     if(
-        new Date(flightArrivalTime) == "Invalid Date" || 
-        new Date( flightDepartureTime) == "Invalid Date"
+        isNaN(new Date(flightArrivalTime).getTime()) || 
+        isNaN(new Date(flightDepartureTime).getTime())
     ) {
         errorResponse.error = new AppError (
             "Departure and/or Arrival Time format is incorrect",
