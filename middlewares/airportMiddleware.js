@@ -39,7 +39,7 @@ function validateCreateRequest(req, res, next) {
 }
 
 
-module.export = {
+module.exports = {
     validateUpdateRequest,
     validateCreateRequest
 }
