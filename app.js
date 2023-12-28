@@ -1,6 +1,5 @@
-const {logger } = require('./config/loggerConfig');
 const { PORT } = require("./config/serverConfig");
-const {sequelize} = require('./models/index');
+const db = require("./models");
 
 const express = require('express');
 const app = express();
@@ -32,15 +31,19 @@ app.use('/api', routes);
 
 
 // start server
-app.set('port', PORT);
-sequelize.sync({force: false, alter: true})
+db.sequelize
+  .authenticate()
   .then(() => {
-    app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-    });
+    console.log("Connection to MySQL DB established");
   })
   .catch((error) => {
-    console.error('Unable to sync models with the database:', error);
+    console.log("MYSQL DB connection failed: ", error);
   });
+
+db.sequelize.sync({ force: false });
+
+app.listen(PORT, () => {
+  console.log(`Server running: http://localhost:${PORT}`);
+});
 
 module.exports = app;

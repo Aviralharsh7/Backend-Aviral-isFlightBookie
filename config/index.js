@@ -3,4 +3,5 @@ module.exports = {
     logger: require('./loggerConfig'),
     verifyJWT : require('./verifyJWT'),
     corsOptions: require('./corsOptions'),
+    dbConfig: require('./dbConfig')
 }
