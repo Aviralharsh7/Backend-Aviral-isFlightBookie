@@ -1,10 +1,7 @@
 # MachArrow Airlines
 Backend of Flight Services Application *using Express.js and Sequelize* 
 
-<br>
-via https://github.com/winterrrrrff/realWorld-server
-<br>
-PS: for proof of work, please visit "notes" folder where I documented my troubleshooting journey as build this project.
+PS: for proof of work, please visit "[notes](https://github.com/Aviralharsh7/MachArrow-Airlines/tree/main/00%20notes)" folder where I documented my troubleshooting journey as I build this project.
 
 ## Features
 
@@ -101,29 +98,9 @@ PS: for proof of work, please visit "notes" folder where I documented my trouble
 - clone the repository
 - check if `npm` is installed via `npm -v`
 - run `npm install` on root directory to install dependencies
-- create a `.env` file in root directory and add the following variable
+- create a `.env` file in root directory and fill it wrt .env_example 
 - run `npm run start`
 
-## Environment variables
-
-```jsx
-BB# .env
-
-NODE_ENV = development
-PORT = 4200
-
-ACCESS_TOKEN_SECRET = jaiMataDi
-
-DB_dev_USERNAME= asd
-DB_dev_PASSWORD= asd
-DB_dev_HOST= asd
-DB_dev_PORT= asd
-
-DB_prod_USERNAME= asd
-DB_prod_PASSWORD= asd
-DB_prod_HOST= asd
-DB_prod_PORT= asd
-```
 
 ## DB Design
 
@@ -137,7 +114,7 @@ DB_prod_PORT= asd
 ## DB Choices
 
 - Unique validation on -
-    - [city.name](http://city.name)
+    - city.name
     - airport.address
 - Max Airplane capacity = 1000 (default = 0)
 - Max difference between arrival and departure time = 23:50:00 hours
