@@ -28,9 +28,5 @@ sequelize
     });
 
 module.exports = {
-    sequelize,
-    Airplane: require("./airplane"),
-    Airport: require("./airport"),
-    City: require("./city"),
-    Flight: require("./flight"),
+    db
 };
