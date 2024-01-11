@@ -3,4 +3,4 @@ const allowedOrigins = [
     'http://localhost:3000'        // process.env.PORT
 ]
 
-module.export = allowedOrigins;
+module.exports = allowedOrigins;
